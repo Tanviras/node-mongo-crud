@@ -1,0 +1,14 @@
+Considering already node is installed,
+npm init(node chalu)
+npm install express mongodb
+nodemon install kora lagbe
+npm install --save cors body-parser
+
+express theke jinishpati copy kore niye eshe node ready kora 
+
+mongodob atlas theke cluster creation
+connect
+password ta must mone rakhte hobe
+connect sesh hoile then collection
+
+Then, index.js er moddhe clusters er database er connection korte hobe.(Module 48.3)
