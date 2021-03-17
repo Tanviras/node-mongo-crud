@@ -4,7 +4,7 @@ const bodyParser=require('body-parser');
 
 
 const MongoClient = require('mongodb').MongoClient;
-const ObjectId=require('mongodb').ObjectId;
+const ObjectId=require('mongodb').ObjectId;//mongodb database er moddhe _id seta kora ObjectId('**********') erokom vabe,that's why we should use ObjectId here
 
 const password='BXM8sLW5Q$JAm9Z';
 const uri = "mongodb+srv://organicUser:BXM8sLW5Q$JAm9Z@cluster0.pjygh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
@@ -38,8 +38,7 @@ client.connect(err => {
     //   console.log(product);
       productCollection.insertOne(product)
       .then(result=>{
-          console.log('product added');
-          res.send('success');
+          res.redirect('/');
       })  
   })
 
@@ -68,10 +67,45 @@ app.delete('/delete/:id',(req,res)=>{
     })
     .then(result=> {
         // console.log(result)
-        console.log(result.deletedCount);//deletedCount is a property of result which tells us how many number of results are deleted
+        //deletedCount is a property of result which tells us how many number of results are deleted
+        res.send(result.deletedCount>0)
+      })
 })
 
+
+
+//Laoding single product
+//kind of reading data,so has a relation with GET
+
+app.get('/product/:id',(req,res)=>{
+  // console.log(req.params.id);
+  productCollection.find({
+    _id:ObjectId(req.params.id)
 })
+  .toArray((err,documents)=>{
+    res.send(documents[0]);
+})
+})
+
+
+
+
+//'UPDATE' part of CRUD- update has a relation with patch
+//https://docs.mongodb.com/guides/server/update/
+
+app.patch('/update/:id',(req,res)=>{
+  productCollection.updateOne(
+    {_id:ObjectId(req.params.id)},
+    { 
+      $set: { price: req.body.price, quantity: req.body.quantity }
+    }
+    )
+    .then(result=>{
+     res.send(result.modifiedCount>0)
+    })
+    
+})
+
 
 
 

@@ -12,3 +12,10 @@ password ta must mone rakhte hobe
 connect sesh hoile then collection
 
 Then, index.js er moddhe clusters er database er connection korte hobe.(Module 48.3)
+
+Then,data add korar pala(CREATE)
+go https://docs.mongodb.com/guides/server/insert/
+3 no point: insert a single document
+
+Then,data read(READ)
+Then,data delete(DELETE)

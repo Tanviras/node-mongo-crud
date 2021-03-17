@@ -17,33 +17,75 @@
     <div id="products">
 
     </div>
+    <div id="update">
+
+    </div>
 
 <script>
 //fetching on my own data's api! woah!
-fetch('/products')
+function loadAllProducts(){
+    fetch('/products')
 .then(response=>response.json())
 .then(data=>{
 console.log(data);
 const container =document.getElementById('products');
-
+container.innerHTML='';
 data.forEach(singleData=>{
 const p=document.createElement('p');
 p.innerHTML=`${singleData.name} is ${singleData.price}
-<button onclick=deleteProduct('${singleData._id}')>Delete</button>`;
+<button onclick="loadProduct('${singleData._id}')">Update</button>
+<button onclick="deleteProduct(event, '${singleData._id}')">Delete</button>`;
 // debugger;
 container.appendChild(p);
 })
-
 })
+}
 
-function deleteProduct(id){
+loadAllProducts();
+
+
+function deleteProduct(event, id){
     fetch(`/delete/${id}`,{
         method:'DELETE'
     })
     .then(result=>result.json())
     .then(result=>{
-        console.log('deleted successfully');
+        if(result){
+          event.target.parentNode.style.display= null;
+        }
     })
+}
+
+function loadProduct(id){
+    fetch(`/product/${id}`)
+    .then(res=>res.json())
+    .then(data=>{
+        // console.log(data[0]._id);
+        const update=document.getElementById("update");
+        update.innerHTML=`Update ${data._id}<br/>
+        Price: <input type="number" value=${data.price} id="price">
+        <br/>
+        Quantity: <input type="number" value=${data.quantity} id="quantity">
+        <button onclick="updateProduct('${data._id}')">Submit</button>
+        <br/>`;
+    })
+}
+
+function updateProduct(id){
+  const price=document.getElementById('price').value;
+  const update=document.getElementById('quantity').value;
+  const product={id,price,quantity};
+  fetch(`/update/${id}`,{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(product)
+  })
+  .then(res=>res.json())
+  .then(result=>{
+      if(result){
+loadAllProducts();
+      }
+  })
 }
 </script>
 </body>
